@@ -1,11 +1,19 @@
 <?php session_start();
 include('config.php'); 
+include('functions.php');
 $breadcrumb_array = array(
     "لوحة التحكم",
-    "إدارة التصنيفات",
-	"إضافة تصنيف جديد");
+    "إدارة التصنيفات"
+	);
 
 include('header.php'); 
+if (isset($_GET['del_id']) && !empty($_GET['del_id'])){
+	$del_id= input_secure($_GET['del_id']);
+	mysqli_query($connection,"DELETE FROM category WHERE ID='". $del_id ."'");
+	?>
+      <script language="javascript">window.location.href="category.php?error_msg=1";</script>
+    <?php
+}else{
 ?>
 <!--begin::Card-->
 <div class="card card-custom">
@@ -33,6 +41,8 @@ include('header.php');
                     <th>رقم التصنيف</th>
 					<th>نوع المحتوى</th>
 					<th>فعال</th>
+					<th>تعديل</th>
+					<th>حذف</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -62,6 +72,8 @@ include('header.php');
 					}
 					 ?></td>
 					<td><?php if($row['cat_pvalid']== 1) {echo "فعال";}else{echo "غير فعال";} ?></td>
+					<td><a href=""> تعديل </a></td>
+					<td><a href="category.php?del_id= <?php echo $row['ID']; ?>">حذف </a></td>
 				</tr>
                 <?php } ?>
 			</tbody>
@@ -71,5 +83,6 @@ include('header.php');
 </div>
 <!--end::Card-->
 <?php 
+}
 include('footer.php'); 
 ?>

@@ -7,24 +7,15 @@ $inp_var_name = addslashes($inp_var_name);
 $inpvarname = strip_tags($inp_var_name);
 return $inp_var_name;
 }
-?>
 
-<?php
 /*************************** Upload Files ***************************/
-// upload files
-$expensions = array("gif","jpg","jpeg","pjpeg","bmp","png","doc", "docx","ppt","pptx","xls","xlsx","zip","rar","pdf");
-if(isset($_FILES['data']['name']) && $_FILES['data']['name'] !=""){
-      $pfiledir = upload_file($_FILES['data'],$expensions,"articles","Image Title");
-} else {
-      $pfiledir = "";
-}
+// enctype="multipart/form-data" in form.   لتحميل الصور
+
 
 // Start of file upload funtion for PHP5
 function upload_file($file_data,$expensions,$pre_char,$file_label)
 {
-    global $uploadpath;
-    global $enable_aws_uploads;
-    global $bucketname;
+ 
     
       $file_path            = "";
       $error_msg_extention  = "";
@@ -50,10 +41,7 @@ function upload_file($file_data,$expensions,$pre_char,$file_label)
       
       if(empty($errors)==true){
          move_uploaded_file($file_tmp,$uploadpath."uploads/".$file_name);
-         $file_path = $uploadpath."uploads/".$file_name;
-         if($enable_aws_uploads == true) {
-            aws_upload($file_name,"uploads", $bucketname);
-         }
+         $file_path = "uploads/".$file_name;
          return $file_path;
       } 
       } else {

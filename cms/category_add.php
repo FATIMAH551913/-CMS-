@@ -7,6 +7,7 @@ $breadcrumb_array = array(
         "إضافة تصنيف جديد");
 
 include('header.php'); 
+
 ?>
 <?php
 if (isset($_POST['save_form']) && !empty($_POST['save_form'])){
@@ -18,8 +19,16 @@ if (isset($_POST['save_form']) && !empty($_POST['save_form'])){
 		$cat_pvalid= 0;
 	}
 
+	// upload files
+$expensions = array("jpg","jpeg","png");
+if(isset($_FILES['data']['name']) && $_FILES['data']['name'] !=""){
+      $cat_image = upload_file($_FILES['data'],$expensions,"cat_","صورة التصنيف");
+} else {
+	$cat_image = "";
+}
+
 // Add Row
-mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name='". $cat_name ."',cat_type='". $cat_type ."' ,cat_pvalid='". $cat_pvalid . "' ");
+mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name='". $cat_name ."',cat_type='". $cat_type ."' ,cat_pvalid='". $cat_pvalid . "',cat_image='" . $cat_image . "',cat_order='1' ");
 ?>
       <script language="javascript">window.location.href="category.php?error_msg=1";</script>
       <?php
@@ -35,7 +44,7 @@ mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name=
 				</h3>
 			</div>
 			<!--begin::Form-->
-			<form class="form" method="post" action="category_add.php">
+			<form class="form" method="post" action="category_add.php" enctype="multipart/form-data">
 				<div class="card-body">
                     <div class="form-group row">
 						<label class="col-lg-3 col-form-label text-right">اسم التصنيف</label>
@@ -43,8 +52,6 @@ mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name=
 							<input name="cat_name" id="cat_name" type="text" class="form-control" placeholder=""/>
 						</div>
 					</div>
-					<?php
-					/*
                     <div class="form-group row">
 						<label class="col-lg-3 col-form-label text-right">صورة</label>
 						<div class="col-lg-9 col-xl-4">
@@ -54,9 +61,7 @@ mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name=
                             </div>
 						</div>
 					</div>
-					*/
-					?>
-                    <div class="form-group row">
+					 <div class="form-group row">
 						<label class="col-lg-3 col-form-label text-right">نوع المحتوى</label>
 						<div class="col-lg-9 col-xl-4">
 						<select name ="cat_type" id="cat_type" class="form-control form-control-solid ">
@@ -84,7 +89,7 @@ mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name=
 						<div class="col-lg-10">
 						<input type="hidden" id="save_form" name="save_form" value="1">
 							<button type="submit" class="btn btn-success mr-2">حفظ</button>
-							<a href="category.php" class="btn btn-secondary">إلغاء</a>
+							<a href="category_add.php" class="btn btn-secondary">إلغاء</a>
 						</div>
 					</div>
 				</div>
