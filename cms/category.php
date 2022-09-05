@@ -14,6 +14,13 @@ if (isset($_GET['del_id']) && !empty($_GET['del_id'])){
       <script language="javascript">window.location.href="category.php?error_msg=1";</script>
     <?php
 }else{
+
+     if (isset($_GET['cat_search']) && !empty($_GET['cat_search'])){
+		$cat_search= input_secure($_GET['cat_search']);
+		$read = mysqli_query($connection,"SELECT * from category WHERE cat_name LIKE '%". $cat_search ."%' ORDER BY ID ASC");
+	 }else{
+		$read = mysqli_query($connection,"SELECT * from category ORDER BY ID ASC");
+	 }
 ?>
 <!--begin::Card-->
 <div class="card card-custom">
@@ -33,6 +40,26 @@ if (isset($_GET['del_id']) && !empty($_GET['del_id'])){
 		</div>
 	</div>
 	<div class="card-body">
+
+
+		<div class="mb-7">
+		   <div class="row align-items-center">
+		     <div class="col-lg-9 col-xl-8">
+		        <div class="row align-items-center">
+					<form id="search_form " name="search_form" action="" >
+						<div class="col-md-4 my-2 my-md-0">
+							<div class="input-icon">
+								<input type="text" class="form-cotrol" placeholder="" id="cat_search" name="cat_search" />
+							</div>
+						</div>
+						<!-- <input type="hidden" name="search_frm_action" id="search_frm_action" value="1"> -->
+						<button name="search" id="search" value="search" class="btn btn-primary font-weight-bolder">بحث</button>
+                    </form>
+		     </div>
+		   </div>
+	    </div>
+	</div>
+						   
         <!--begin: Datatable-->
 		<table class="table datatable-bordered datatable-head-custom">
 			<thead>
@@ -49,7 +76,7 @@ if (isset($_GET['del_id']) && !empty($_GET['del_id'])){
 				<?php
 
 				// Select Queries
-				$read = mysqli_query($connection,"SELECT * from category ORDER BY ID ASC");
+				
 				while ($row=mysqli_fetch_array($read)) {
 				?>
 
@@ -72,7 +99,7 @@ if (isset($_GET['del_id']) && !empty($_GET['del_id'])){
 					}
 					 ?></td>
 					<td><?php if($row['cat_pvalid']== 1) {echo "فعال";}else{echo "غير فعال";} ?></td>
-					<td><a href=""> تعديل </a></td>
+					<td><a href="category_update.php?cat_id= <?php echo $row['ID']; ?>"> تعديل </a></td>
 					<td><a href="category.php?del_id= <?php echo $row['ID']; ?>">حذف </a></td>
 				</tr>
                 <?php } ?>

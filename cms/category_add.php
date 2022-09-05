@@ -76,7 +76,7 @@ mysqli_query($connection,"insert ". $sql_insert_ignore ." category set cat_name=
 						<div class="col-3">
 							<span class="switch switch-icon">
 								<label>
-									<input type="checkbox" checked="checked" name="cat_pvalid" id="cat_pvalid"/>
+									<input type="checkbox" name="cat_pvalid" id="cat_pvalid"/>
 									<span></span>
 								</label>
 							</span>
